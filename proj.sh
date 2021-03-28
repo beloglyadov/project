@@ -6,7 +6,7 @@
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 dnf install php php-curl php-xml php-zip php-mysqlnd php-intl php-gd php-json php-ldap php-mbstring php-opcache docker-ce -y && systemctl enable --now docker  
-yum update -y && yum install -y mysql-server httpd git vim wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
+yum update -y && yum install -y mysql-server httpd vim wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
 
 #Права на папки Docker Compose
 chmod +x /usr/local/bin/docker-compose
@@ -57,12 +57,12 @@ mysql -e "FLUSH PRIVILEGES;"
 ##################################### JOOMLA #####################################
 
 #Подготовка к установке и настройке CMS Joomla 3.9.3
-mkdir /tmp/tempJL
-cd /tmp/tempJL
+mkdir /tmp/project/tempJL
+cd /tmp/project/tempJL
 wget https://github.com/joomla/joomla-cms/releases/download/3.9.3/Joomla_3.9.3-Stable-Full_Package.tar.gz
 mkdir /var/www/html/joomla
 tar -xvzf Joomla_3.9.3-Stable-Full_Package.tar.gz -C /var/www/html/joomla
-rm -Rf /tmp/tempJL
+rm -Rf /tmp/project/tempJL
 
 #Назначаем владельцем пользователя apache, настраиваем права доступа к директориям
 chown -R apache:apache /var/www/html/joomla
@@ -75,25 +75,23 @@ systemctl restart httpd
 
 ##################################### PROMETHEUS & GRAFANA #####################################
 
-#Копируем файлы для запуска Prometheus
-cd /tmp/project/prom-grafana
-
 #Создаём учетную запись для приложения apache_exporter
 groupadd --system apache_exporter
 useradd -s /bin/false -r -g apache_exporter apache_exporter
 #Выполняем загрузку и установку приложения-экспортера Prometheus Apache
-mkdir /tmp/apache_exporter -p
-cd /tmp/apache_exporter
-cp /tmp/project/prom-grafana/apache_exporter.service /etc/systemd/system/apache_exporter.service
+mkdir /tmp/project/prom-grafana/apache_exporter
+cd /tmp/project/prom-grafana/apache_exporter
+cp -f ../apache_exporter.service /etc/systemd/system/apache_exporter.service
 wget https://github.com/Lusitaniae/apache_exporter/releases/download/v0.5.0/apache_exporter-0.5.0.linux-amd64.tar.gz
 tar -zxvf apache_exporter-0.5.0.linux-amd64.tar.gz
 install apache_exporter-0.5.0.linux-amd64/apache_exporter /usr/local/bin/
-rm -rf /tmp/apache_exporter
+rm -rf /tmp/prom-grafana/apache_exporter
 
 systemctl daemon-reload
 systemctl enable apache_exporter --now
 
 #Запуск контейнеров Prometheus, Node_exporter, cAdvisor, Grafana
+cd ..
 docker-copmose up
 
 ##################################### ELK #####################################
@@ -104,9 +102,11 @@ cd /tmp/project/elk-filebeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.11.2-x86_64.rpm
 sudo rpm -vi filebeat-7.11.2-x86_64.rpm
 
+cp -f /tmp/project/elk-filebeat/filebeat.yml /etc/filebeat/
+
 filebeat modules enable apache
 service filebeat start
 
 docker-compose up -d
-sleep 200
+sleep 180
 filebeat setup
