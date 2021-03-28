@@ -85,14 +85,14 @@ cp -f ../apache_exporter.service /etc/systemd/system/apache_exporter.service
 wget https://github.com/Lusitaniae/apache_exporter/releases/download/v0.5.0/apache_exporter-0.5.0.linux-amd64.tar.gz
 tar -zxvf apache_exporter-0.5.0.linux-amd64.tar.gz
 install apache_exporter-0.5.0.linux-amd64/apache_exporter /usr/local/bin/
+cd ..
 rm -rf /tmp/prom-grafana/apache_exporter
 
 systemctl daemon-reload
 systemctl enable apache_exporter --now
 
 #Запуск контейнеров Prometheus, Node_exporter, cAdvisor, Grafana
-cd ..
-docker-copmose up
+docker-compose up -d
 
 ##################################### ELK #####################################
 
@@ -108,5 +108,4 @@ filebeat modules enable apache
 service filebeat start
 
 docker-compose up -d
-sleep 180
-filebeat setup
+#filebeat setup
