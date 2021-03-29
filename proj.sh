@@ -56,16 +56,15 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 ##################################### MYSQL ВОССТАНОВЛЕНИЕ ИЗ БЭКАПА #####################################
 
+#Переходим в директорию с проектом, копируем наш сайт, восстанавливаем базу целиком из бэкапа
+cd /tmp/project/site
+cp -r ./joomla /var/www/html
+mysql < ./exam_db.sql
 #Создаём файл .my.cnf, чтобы входить в MySQL без пароля
 cat > ~/.my.cnf << EOF
 [client]
 password="Otus321$"
 EOF
-
-#Переходим в директорию с проектом, копируем наш сайт, восстанавливаем базу целиком из бэкапа
-cd /tmp/project/site
-cp -r ./joomla /var/www/html
-mysql < ./exam_db.sql
 systemctl restart mysqld
 
 ##################################### JOOMLA #####################################
@@ -113,7 +112,7 @@ cd /tmp/project/elk-filebeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.11.2-x86_64.rpm
 sudo rpm -vi filebeat-7.11.2-x86_64.rpm
 
-cp -f /tmp/project/elk-filebeat/filebeat.yml /etc/filebeat/
+cp --force /tmp/project/elk-filebeat/filebeat.yml /etc/filebeat/
 
 filebeat modules enable apache
 service filebeat start
