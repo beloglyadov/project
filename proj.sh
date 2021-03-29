@@ -60,12 +60,12 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 cd /tmp/project/site
 cp -r ./joomla /var/www/html
 mysql < ./exam_db.sql
+systemctl restart mysqld
 #Создаём файл .my.cnf, чтобы входить в MySQL без пароля
 cat > ~/.my.cnf << EOF
 [client]
 password="Otus321$"
 EOF
-systemctl restart mysqld
 
 ##################################### JOOMLA #####################################
 
