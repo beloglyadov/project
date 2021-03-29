@@ -64,7 +64,7 @@ EOF
 
 #Переходим в директорию с проектом, копируем наш сайт, восстанавливаем базу целиком из бэкапа
 cd /tmp/project/site
-cp ./joomla /var/www/html
+cp -r ./joomla /var/www/html
 mysql < ./exam_db.sql
 systemctl restart mysqld
 
