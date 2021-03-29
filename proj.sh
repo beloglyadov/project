@@ -12,23 +12,49 @@ yum update -y && yum install -y mysql-server httpd vim wget tar && systemctl ena
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-##################################### MYSQL #####################################
+##################################### MYSQL ЧИСТАЯ УСТНОВКА #####################################
 
 #Настройка базы mysql_secure_installation
-cat > mysql_secure_installation << EOF
+#cat > mysql_secure_installation << EOF
 # Удаляем анонимных пользователей
-DELETE FROM mysql.user WHERE User='';
+#DELETE FROM mysql.user WHERE User='';
 # Отключаем удалённое подключение для пользователя 'root' с других хостов
-DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+#DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 # Удаляем демонстрационную базу данных
-DROP DATABASE IF EXISTS test;
-DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+#DROP DATABASE IF EXISTS test;
+#DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 # Применяем изменения
-FLUSH PRIVILEGES;
-EOF
+#FLUSH PRIVILEGES;
+#EOF
 
 # Устанавливаем пароль с методом шифрования sha2 для входа в MySQL, чтобы нельзя было подключиться без пароля
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'Otus321$';"
+#mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'Otus321$';"
+
+#Создаём файл .my.cnf, чтобы входить в MySQL без пароля
+#cat > ~/.my.cnf << EOF
+#[client]
+#password="Otus321$"
+#EOF
+
+#Создаём базу данных для сайта
+#mysql -e "CREATE DATABASE joomla;"
+#Пароль для базы с localhost'a
+#mysql -e "CREATE USER juser@localhost IDENTIFIED BY 'mypassword';"
+#Доступы на базу joomla для пользователя juser
+#mysql -e "GRANT ALL PRIVILEGES ON joomla.* TO juser@localhost;"
+
+#Создаём пользователя для репликации на мастере
+#mysql -e "CREATE USER repl@192.168.0.17 IDENTIFIED WITH caching_sha2_password BY 'OtusProject@$';"
+#Даём праван все базы и таблицы
+#mysql -e "GRANT REPLICATION SLAVE ON *.* TO repl@192.168.0.17;"
+#Применяем изменения
+#mysql -e "FLUSH PRIVILEGES;"
+
+#SELECT User, Host FROM mysql.user; 
+#SHOW MASTER STATUS\G; 
+#SHOW DATABASES;
+
+##################################### MYSQL ВОССТАНОВЛЕНИЕ ИЗ БЭКАПА #####################################
 
 #Создаём файл .my.cnf, чтобы входить в MySQL без пароля
 cat > ~/.my.cnf << EOF
@@ -36,42 +62,27 @@ cat > ~/.my.cnf << EOF
 password="Otus321$"
 EOF
 
-#Создаём базу данных для сайта
-mysql -e "CREATE DATABASE joomla;"
-#Пароль для базы с localhost'a
-mysql -e "CREATE USER juser@localhost IDENTIFIED BY 'mypassword';"
-#Доступы на базу joomla для пользователя juser
-mysql -e "GRANT ALL PRIVILEGES ON joomla.* TO juser@localhost;"
-
-#Создаём пользователя для репликации на мастере
-mysql -e "CREATE USER repl@192.168.0.17 IDENTIFIED WITH caching_sha2_password BY 'OtusProject@$';"
-#Даём праван все базы и таблицы
-mysql -e "GRANT REPLICATION SLAVE ON *.* TO repl@192.168.0.17;"
-#Применяем изменения
-mysql -e "FLUSH PRIVILEGES;"
-
-#SELECT User, Host FROM mysql.user; 
-#SHOW MASTER STATUS\G; 
-#SHOW DATABASES;
+#Переходим в директорию с проектом, копируем наш сайт, восстанавливаем базу целиком из бэкапа
+cd /tmp/project/site
+cp ./joomla /var/www/html
+mysql < ./exam_db.sql
+systemctl restart mysqld
 
 ##################################### JOOMLA #####################################
 
 #Подготовка к установке и настройке CMS Joomla 3.9.3
-mkdir /tmp/project/tempJL
-cd /tmp/project/tempJL
-wget https://github.com/joomla/joomla-cms/releases/download/3.9.3/Joomla_3.9.3-Stable-Full_Package.tar.gz
-mkdir /var/www/html/joomla
-tar -xvzf Joomla_3.9.3-Stable-Full_Package.tar.gz -C /var/www/html/joomla
-rm -Rf /tmp/project/tempJL
+#mkdir /tmp/project/tempJL
+#cd /tmp/project/tempJL
+#wget https://github.com/joomla/joomla-cms/releases/download/3.9.3/Joomla_3.9.3-Stable-Full_Package.tar.gz
+#mkdir /var/www/html/joomla
+#tar -xvzf Joomla_3.9.3-Stable-Full_Package.tar.gz -C /var/www/html/joomla
+#rm -Rf /tmp/project/tempJL
 
 #Назначаем владельцем пользователя apache, настраиваем права доступа к директориям
-chown -R apache:apache /var/www/html/joomla
-chmod -R 755 /var/www/
-systemctl restart httpd
+#chown -R apache:apache /var/www/html/joomla
+#chmod -R 755 /var/www/
+#systemctl restart httpd
 
-#cd ~
-#git clone https://github.com/beloglyadov/project
-#cp -r project/joomla /var/www/html/
 
 ##################################### PROMETHEUS & GRAFANA #####################################
 
