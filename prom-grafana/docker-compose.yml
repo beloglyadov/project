@@ -30,3 +30,4 @@ services:
     image: grafana/grafana:7.4.2
     ports:
       - 3000:3000
+
