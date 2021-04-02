@@ -16,12 +16,6 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 cd /tmp
 git clone https://github.com/beloglyadov/project
 
-#Установка sshpass для подключения к slave серверу без пароля 
-cd /tmp
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-rpm -ivh epel-release-latest-8.noarch.rpm
-yum -y install sshpass
-
 ##################################### MYSQL ВОССТАНОВЛЕНИЕ ИЗ БЭКАПА #####################################
 
 #Переходим в директорию с проектом,, 
@@ -51,6 +45,13 @@ cat > ~/.my.cnf << EOF
 [client]
 password="Otus321$"
 EOF
+
+#Установка sshpass для подключения к slave серверу без пароля 
+cd /tmp
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+rpm -ivh epel-release-latest-8.noarch.rpm
+cd ..
+yum -y install sshpass
 
 ##################################### PROMETHEUS & GRAFANA #####################################
 
