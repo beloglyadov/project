@@ -43,10 +43,12 @@ password="Otus321$"
 EOF
 
 #Установка sshpass для подключения к slave серверу без пароля 
-cd /tmp
+mkdir /tmp/project/sshpass
+cd /tmp/project/sshpass
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 rpm -ivh epel-release-latest-8.noarch.rpm
 yum -y install sshpass
+rm -rf /tmp/project/sshpass
 #Копируем на slave скрипт для настройки и запуска slave сервера для параллельной установки
 sshpass -p 123 scp /tmp/project/slave/slave.sh /tmp/project/slave/shut-master.sh root@192.168.0.17:~/ 
 sshpass -p 123 ssh root@192.168.0.17 chmod +rx ~/slave.sh ~/shut-master.sh ~/launch-mon.sh
