@@ -50,7 +50,7 @@ rpm -ivh epel-release-latest-8.noarch.rpm
 yum -y install sshpass
 rm -rf /tmp/project/sshpass
 #Копируем на slave скрипт для настройки и запуска slave сервера для параллельной установки
-sshpass -p 123 scp /tmp/project/slave/slave.sh /tmp/project/slave/shut-master.sh root@192.168.0.17:~/ 
+sshpass -p 123 scp /tmp/project/slave/slave.sh /tmp/project/slave/shut-master.sh /tmp/project/master/master-new.sh root@192.168.0.17:~/ 
 sshpass -p 123 ssh root@192.168.0.17 chmod +rx ~/slave.sh ~/shut-master.sh ~/master-new.sh
 #Запускаем отдельно каждую команду, т.к. через ssh не даёт выполнить их совместно
 sshpass -p 123 ssh root@192.168.0.17 ~/slave.sh
