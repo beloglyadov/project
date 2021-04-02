@@ -72,6 +72,9 @@ install apache_exporter-0.5.0.linux-amd64/apache_exporter /usr/local/bin/
 cd ..
 rm -rf /tmp/prom-grafana/apache_exporter
 
+#Меняем ip адрес для нового сервера в конфигурационном файле PROMETHEUS
+sed -i s/192.168.0.21/192.168.0.22/g /tmp/project/prom-grafana/prometheus.yml
+
 systemctl daemon-reload
 systemctl enable apache_exporter --now
 
@@ -89,7 +92,7 @@ filebeat modules enable apache
 systemctl enable filebeat --now
 
 #Включаем репликацию на slave
-sshpass -p 123 ssh root@192.168.0.17 ~/repl_new.sql
+sshpass -p 123 ssh root@192.168.0.17 mysql < repl_new.sql
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
