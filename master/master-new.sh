@@ -6,15 +6,15 @@
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 dnf install php php-curl php-xml php-zip php-mysqlnd php-intl php-gd php-json php-ldap php-mbstring php-opcache docker-ce -y && systemctl enable --now docker  
-yum update -y && yum install -y mysql-server httpd vim wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
-
-#Права на папки Docker Compose для запуска  
-chmod +x /usr/local/bin/docker-compose
-ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+yum update -y && yum install -y mysql-server httpd vim git wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
 
 #Скачиваем проект
 cd /tmp
 git clone https://github.com/beloglyadov/project
+
+#Права на папки Docker Compose для запуска  
+chmod +x /usr/local/bin/docker-compose
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 ##################################### MYSQL ВОССТАНОВЛЕНИЕ ИЗ БЭКАПА #####################################
 
@@ -40,6 +40,8 @@ EOF
 
 systemctl restart mysqld
 
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'Otus321$';"
+
 #Создаём файл .my.cnf, чтобы входить в MySQL без пароля
 cat > ~/.my.cnf << EOF
 [client]
@@ -47,11 +49,13 @@ password="Otus321$"
 EOF
 
 #Установка sshpass для подключения к slave серверу без пароля 
-cd /tmp
+mkdir /tmp/project/sshpass
+cd /tmp/project/sshpass
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 rpm -ivh epel-release-latest-8.noarch.rpm
-cd ..
 yum -y install sshpass
+cd ..
+rm -rf /tmp/project/sshpass
 
 ##################################### PROMETHEUS & GRAFANA #####################################
 
@@ -85,7 +89,7 @@ filebeat modules enable apache
 systemctl enable filebeat --now
 
 #Включаем репликацию на slave
-sshpass -p 123 ssh root@192.168.0.17 mysql -e "CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE;"
+sshpass -p 123 ssh root@192.168.0.17 ~/repl_new.sql
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
