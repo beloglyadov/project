@@ -56,6 +56,7 @@ crontab < ~/crontab.txt
 cat > ~/repl_new.sql << EOF
 CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE;
 EOF
+chmod +x ~/repl_new.sql
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
