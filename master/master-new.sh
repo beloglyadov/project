@@ -12,6 +12,10 @@ yum update -y && yum install -y mysql-server httpd vim wget tar && systemctl ena
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
+#Скачиваем проект
+cd /tmp
+git clone https://github.com/beloglyadov/project
+
 #Установка sshpass для подключения к slave серверу без пароля 
 cd /tmp
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
