@@ -6,7 +6,7 @@
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 dnf install php php-curl php-xml php-zip php-mysqlnd php-intl php-gd php-json php-ldap php-mbstring php-opcache docker-ce -y && systemctl enable --now docker  
-yum update -y && yum install -y mysql-server httpd vim git wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
+yum update -y && yum install -y git mysql-server httpd vim wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
 
 #Скачиваем проект
 cd /tmp
