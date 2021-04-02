@@ -82,7 +82,7 @@ sudo rpm -vi filebeat-7.11.2-x86_64.rpm
 cp -f /tmp/project/elk-filebeat/filebeat.yml /etc/filebeat/
 
 filebeat modules enable apache
-systemctl filebeat enable --now
+systemctl enable filebeat --now
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
