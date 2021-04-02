@@ -1,12 +1,31 @@
-#!/bin/bash 
+#!/bin/bash
 
 ##################################### MASTER УСТАНОВКА СОФТА #####################################
 
 #Подготовка сервера, установка приложений для работы, а также включаем службы в автозапуск HTTPD и MySQL, установка Docker, Docker Compose
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-dnf install php php-curl php-xml php-zip php-mysqlnd php-intl php-gd php-json php-ldap php-mbstring php-opcache docker-ce -y && systemctl enable --now docker  
-yum update -y && yum install -y git mysql-server httpd vim wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
+dnf install php -y
+dnf install php-xml -y
+dnf install php-zip -y
+dnf install php-mysqlnd -y
+dnf install php-intl -y
+dnf install php-gd -y 
+dnf install php-json -y 
+dnf install php-ldap -y
+dnf install php-mbstring -y
+dnf install php-opcache -y 
+dnf install docker-ce -y 
+systemctl enable --now docker  
+yum update -y 
+yum install -y mysql-server 
+yum install -y httpd 
+yum install -y vim 
+yum install -y git 
+yum install -y wget 
+yum install -y tar 
+systemctl enable httpd --now 
+systemctl enable mysqld --now 
 
 #Скачиваем проект
 cd /tmp
@@ -18,7 +37,7 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 ##################################### MYSQL ВОССТАНОВЛЕНИЕ ИЗ БЭКАПА #####################################
 
-#Переходим в директорию с проектом
+#Переходим в директорию с проектом,, 
 cd /tmp/project/site
 #Копируем наш сайт по указанному пути, где он лежал
 cp -r ./joomla /var/www/html
