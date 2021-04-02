@@ -54,7 +54,7 @@ crontab < ~/crontab.txt
 
 #После восстановления работы на новом master сервере включаем репликацию с ним
 cat > ~/repl_new.sql << EOF
-"CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE"
+CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE;
 EOF
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
