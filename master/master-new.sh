@@ -77,7 +77,7 @@ sudo rpm -vi filebeat-7.11.2-x86_64.rpm
 cp -f /tmp/project/elk-filebeat/filebeat.yml /etc/filebeat/
 
 filebeat modules enable apache
-systemctl filebeat enable --now
+systemctl enable filebeat --now
 
 #Включаем репликацию на slave
 sshpass -p 123 ssh root@192.168.0.17 mysql -e "CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE;"
