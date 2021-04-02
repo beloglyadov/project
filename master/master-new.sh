@@ -25,7 +25,7 @@ cd /tmp/project/site
 #Копируем наш сайт по указанному пути, где он лежал
 cp -r ./joomla /var/www/html
 #Восстанавливаем базу целиком из бэкапа
-mysql < ~/exam_new_db.sql
+mysql < ~/exam_db_new.sql
 #Переапускаем службу, чтобы применить изменения для вышесозданного файла
 systemctl restart mysqld
 
