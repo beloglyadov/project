@@ -59,6 +59,12 @@ EOF
 
 systemctl restart mysqld
 
+#Создаём файл .my.cnf, чтобы входить в MySQL без пароля
+cat > ~/.my.cnf << EOF
+[client]
+password="Otus#Slave^5@"
+EOF
+
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'Otus321$';"
 
 #Создаём файл .my.cnf, чтобы входить в MySQL без пароля
