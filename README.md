@@ -15,40 +15,24 @@ ____
 - Сервер-замена : 192.168.0.22/24
 ____
 
-С каждого сервера проверяем SSH подключение:
-
-    ssh username@ip_address -p 22
 Устанавливаем и настраиваем GIT:
 
-    sudo yum -y install git
+    yum -y install git
 Скачиваем репозиторий, например в /tmp:
 
-    git clone https://github.com/aboltykhov/albo.git
-Каталог albo
+    git clone https://github.com/beloglyadov/project
+____
+> Каталог **project**
+> > elk-filebeat #Подкаталоги: стек Elasticsearch/Logstash/Kibana для Docker Compose
+> > > Filebeat устанавливается локально, далее заменить filebeat.yml из текущего каталога в /etc/filebeat/
+> > master #Каталог со скриптами настройки главного, сервера замены и скриптом настройки мониторинга
+> > prom-grafana #Каталог с файлами настройки Prometheus 
+> > site #Подкаталог joomla с уже установленным сайтом и бэкапом БД
+> > slave #Каталог со скриптами настройки сервера реплики и проверки состояния веб-сервера 
 
-0-elk-filebeat-nginx #Подкаталог: стек Elasticsearch/Logstash/Kibana/Filebeat для Docker Compose
 
-1-server-slave #Подкаталог: сервер-реплика
 
-1-new-sql-server-slave.sh #Установка СУБД MySQL c настриваемой репликацией master/slave
-2-node-exporter-client-setup.sh #Установка Node Exporter для сбора метрик сервера-реплики
-3-iptables-slave-import.sh #Установка утилиты iptables для управления доступом по портам
-4-docker-elk-nginx-setup.sh #Установка стека (Elasticsearch/Logstash/Kibana) и Filebeat для мониторинга nginx в Docker
-
-2-server-master #Подкаталог: основной сервер
-
-1-new-sql-server-master.sh #СУБД MySQL c настриваемой репликацией master/slave
-2-httpd-php-wp-setup.sh #Установка веб-сервера на базе LAMP, CMS WordPress
-3-grafana-setup.sh #Веб-приложение для визуализации мониторинга
-4-prometheus.sh #Установка Prometheus системы мониторинга
-5-alertm-setup.sh #Установка Alertmanager для отправки уведоблений
-6-node-exporter-setup.sh #Установка Node Exporter для сбора метрик
-7-targets-node-setup.sh #Добавление хостов для мониторинга
-8-iptables-master-import.sh #Установка утилиты iptables для управления доступом по портам
-
-3-sql #Подкаталог: sql-запросы
-
-Установка на "Сервере-реплика":
+## Установка на "Главном-сервере":
 Заходим в подкаталог 1-server-slave, отключаем SELinux
 
     ./0-selinux-off.sh
