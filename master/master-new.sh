@@ -117,7 +117,7 @@ filebeat modules enable apache
 systemctl enable filebeat --now
 
 #Включаем репликацию на slave
-sshpass -p 123 ssh root@192.168.0.17 mysql < repl_new.sql
+sshpass -p 123 ssh root@192.168.0.17 "mysql < ~/repl_new.sql"
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
