@@ -53,7 +53,7 @@ rm -rf /tmp/project/sshpass
 sshpass -p 123 scp /tmp/project/slave/slave.sh /tmp/project/slave/shut-master.sh /tmp/project/master/master-new.sh root@192.168.0.17:~/ 
 sshpass -p 123 ssh root@192.168.0.17 chmod +rx ~/slave.sh ~/shut-master.sh ~/master-new.sh
 #Запускаем отдельно каждую команду, т.к. через ssh не даёт выполнить их совместно
-sshpass -p 123 ssh root@192.168.0.17 ~/slave.sh 2>error.log 1>script.log
+sshpass -p 123 ssh root@192.168.0.17 ~/slave.sh 2>~/error_slave.log 1>~/script_slave.log
 
 ##################################### PROMETHEUS & GRAFANA #####################################
 
