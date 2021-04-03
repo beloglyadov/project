@@ -5,8 +5,28 @@
 #Подготовка сервера, установка приложений для работы, а также включаем службы в автозапуск HTTPD и MySQL, установка Docker, Docker Compose
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-dnf install php php-curl php-xml php-zip php-mysqlnd php-intl php-gd php-json php-ldap php-mbstring php-opcache docker-ce -y && systemctl enable --now docker  
-yum update -y && yum install -y git mysql-server httpd vim wget tar && systemctl enable httpd --now && systemctl enable mysqld --now 
+dnf install -y php
+dnf install -y php-curl 
+dnf install -y php-xml 
+dnf install -y php-zip 
+dnf install -y php-mysqlnd 
+dnf install -y php-intl 
+dnf install -y php-gd 
+dnf install -y php-json 
+dnf install -y php-ldap 
+dnf install -y php-mbstring 
+dnf install -y php-opcache 
+dnf install -y docker-ce 
+systemctl enable --now docker  
+yum update -y 
+yum install -y httpd
+yum install -y git 
+yum install -y mysql-server 
+yum install -y tar 
+yum install -y vim 
+yum install -y wget 
+systemctl enable httpd --now 
+systemctl enable mysqld --now 
 
 #Скачиваем проект
 cd /tmp
