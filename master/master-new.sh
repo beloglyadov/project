@@ -111,7 +111,6 @@ cd /tmp/project/elk-filebeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.11.2-x86_64.rpm
 sudo rpm -vi filebeat-7.11.2-x86_64.rpm
 
-filebeat modules enable apache
 systemctl enable filebeat --now
 
 #Включаем репликацию на slave
