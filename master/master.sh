@@ -81,9 +81,8 @@ cd /tmp/project/elk-filebeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.11.2-x86_64.rpm
 sudo rpm -vi filebeat-7.11.2-x86_64.rpm
 
-mv /tmp/project/elk-filebeat/filebeat.yml /etc/filebeat/
-
 filebeat modules enable apache
+mv .filebeat.yml /etc/filebeat/
 systemctl enable filebeat --now
 
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
