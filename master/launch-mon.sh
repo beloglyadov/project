@@ -5,7 +5,8 @@ docker-compose up -d
 #Устанавливаем и запускаем Filebeat локально
 cd /tmp/project/elk-filebeat
 mv -f ./filebeat.yml /etc/filebeat/
+filebeat modules enable apache
 systemctl restart filebeat
 docker-compose up -d
-sleep 120
+sleep 100
 filebeat setup
