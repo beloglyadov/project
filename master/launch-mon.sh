@@ -5,5 +5,5 @@ docker-compose up -d
 #Устанавливаем и запускаем Filebeat локально
 cd /tmp/project/elk-filebeat
 docker-compose up -d
-sleep 130
+sleep 120
 filebeat setup
