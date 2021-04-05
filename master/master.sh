@@ -79,7 +79,7 @@ systemctl enable apache_exporter --now
 cd /tmp/project/elk-filebeat
 
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.11.2-x86_64.rpm
-sudo rpm -vi filebeat-7.11.2-x86_64.rpm
+rpm -vi filebeat-7.11.2-x86_64.rpm
 
 systemctl enable filebeat --now
 
