@@ -64,4 +64,3 @@ chmod +x ~/repl_new.sql
 #Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
 systemctl disable firewalld --now
-reboot
