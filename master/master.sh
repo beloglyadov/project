@@ -89,4 +89,6 @@ systemctl enable filebeat --now
 sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
 systemctl disable firewalld --now
 chmod +rx /tmp/project/master/launch-mon.sh
+
+sshpass -p 123 ssh root@192.168.0.17 reboot
 reboot
