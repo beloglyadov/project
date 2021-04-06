@@ -12,7 +12,7 @@ if [[ $code != 'HTTP/1.1 200 OK'* ]]; then
     #После перезагрузки выполнить скрипт launch-mon.sh для запуска PROMETHEUS и ELK
     sshpass -p 123 scp ~/exam_db_new.sql ~/master-new.sh root@192.168.0.22:~/
     sshpass -p 123 ssh root@192.168.0.22 chmod +rx ~/master-new.sh 
-    sshpass -p 123 ssh root@192.168.0.22 ~/master-new.sh 1>~/script.log 2>~/error.log
+    sshpass -p 123 ssh root@192.168.0.22 ~/master-new.sh 1>~/script_master-new.log 2>~/error_master-new.log
     crontab -r
 
 fi
