@@ -2,12 +2,12 @@ code=$(curl -Is http://192.168.0.21/joomla/ | head -1)
 
 if [[ $code != 'HTTP/1.1 200 OK'* ]]; then
     
+    #Останавливаем slave
+    mysql -e "STOP SLAVE;"
     #Копируем папку с сайтом на сервер реплики
     sshpass -p 123 scp -r root@192.168.0.21:/var/www/html/joomla ~/
     #Тушим главный сервер, чтобы не мешал
     sshpass -p 123 ssh root@192.168.0.21 shutdown now
-    #Останавливаем slave
-    mysql -e "STOP SLAVE;"
     #Дампим БД для передачи на новый master
     mysqldump --all-databases --events --routines --master-data=1 > ~/exam_db_new.sql    
     #Копируем на новый master скрипт для установки и настройки, даём права и запускаем его
