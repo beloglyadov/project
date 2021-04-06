@@ -44,6 +44,17 @@ mysql -e "STOP SLAVE;"
 mysql -e "CHANGE MASTER TO MASTER_HOST='192.168.0.21', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1;"
 mysql -e "START SLAVE; SHOW SLAVE STATUS\G" 
 
+#После восстановления работы на новом master сервере включаем репликацию с ним
+cat > ~/repl_new.sql << EOF
+CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE;
+EOF
+chmod +x ~/repl_new.sql
+
+#Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
+sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
+systemctl disable firewalld --now
+
+
 #В планировщик добавляем скрипт, который каждую минуту проверяет состояние главного сервера, где запущен сайт
 #Если ответ сайта не равен 'HTTP/1.1 200 OK', то он тушит полностью главный сервер и поднимает резеврный, 
 #где с нуля разворачивает всё для работы сайта и мониторинга
@@ -54,13 +65,3 @@ cat > ~/crontab.txt << EOF
 EOF
 
 crontab < ~/crontab.txt 
-
-#После восстановления работы на новом master сервере включаем репликацию с ним
-cat > ~/repl_new.sql << EOF
-CHANGE MASTER TO MASTER_HOST='192.168.0.22', MASTER_USER='repl', MASTER_PASSWORD='OtusProject@$', MASTER_LOG_FILE='binlog.000001', MASTER_LOG_POS=1, GET_MASTER_PUBLIC_KEY = 1; START SLAVE;
-EOF
-chmod +x ~/repl_new.sql
-
-#Отключаем SELINUX и FIREWALLD, перезапускаем для применения изменений SELINUX
-sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
-systemctl disable firewalld --now
