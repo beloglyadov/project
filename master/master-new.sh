@@ -2,6 +2,12 @@
 
 ##################################### MASTER УСТАНОВКА СОФТА #####################################
 
+yum install -y git 
+
+#Скачиваем проект
+cd /tmp
+git clone https://github.com/beloglyadov/project
+
 #Подготовка сервера, установка приложений для работы, а также включаем службы в автозапуск HTTPD и MySQL, установка Docker, Docker Compose
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
@@ -20,17 +26,12 @@ dnf install -y docker-ce
 systemctl enable --now docker  
 yum update -y 
 yum install -y httpd
-yum install -y git 
 yum install -y mysql-server 
 yum install -y tar 
 yum install -y vim 
 yum install -y wget 
 systemctl enable httpd --now 
 systemctl enable mysqld --now 
-
-#Скачиваем проект
-cd /tmp
-git clone https://github.com/beloglyadov/project
 
 #Права на папки Docker Compose для запуска  
 chmod +x /usr/local/bin/docker-compose
